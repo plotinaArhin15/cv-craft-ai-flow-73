@@ -44,26 +44,27 @@ const PersonalInfoForm = ({ data, updateData, onNext }: PersonalInfoFormProps) =
   const canProceed = data.personalInfo.fullName && data.personalInfo.email;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">Personal Information</h3>
-        <p className="text-gray-600">Let's start with your basic contact information.</p>
+        <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">Personal Information</h3>
+        <p className="text-sm sm:text-base text-gray-600">Let's start with your basic contact information.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="fullName">Full Name *</Label>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="space-y-2 sm:col-span-2 md:col-span-1">
+          <Label htmlFor="fullName" className="text-sm sm:text-base">Full Name *</Label>
           <Input
             id="fullName"
             value={data.personalInfo.fullName}
             onChange={(e) => handleInputChange("fullName", e.target.value)}
             placeholder="John Doe"
             required
+            className="text-sm sm:text-base"
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address *</Label>
+        <div className="space-y-2 sm:col-span-2 md:col-span-1">
+          <Label htmlFor="email" className="text-sm sm:text-base">Email Address *</Label>
           <Input
             id="email"
             type="email"
@@ -71,61 +72,67 @@ const PersonalInfoForm = ({ data, updateData, onNext }: PersonalInfoFormProps) =
             onChange={(e) => handleInputChange("email", e.target.value)}
             placeholder="john.doe@email.com"
             required
+            className="text-sm sm:text-base"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
+          <Label htmlFor="phone" className="text-sm sm:text-base">Phone Number</Label>
           <Input
             id="phone"
             value={data.personalInfo.phone}
             onChange={(e) => handleInputChange("phone", e.target.value)}
             placeholder="+1 (555) 123-4567"
+            className="text-sm sm:text-base"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location" className="text-sm sm:text-base">Location</Label>
           <Input
             id="location"
             value={data.personalInfo.location}
             onChange={(e) => handleInputChange("location", e.target.value)}
             placeholder="New York, NY"
+            className="text-sm sm:text-base"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="linkedIn">LinkedIn Profile</Label>
+          <Label htmlFor="linkedIn" className="text-sm sm:text-base">LinkedIn Profile</Label>
           <Input
             id="linkedIn"
             value={data.personalInfo.linkedIn}
             onChange={(e) => handleInputChange("linkedIn", e.target.value)}
             placeholder="linkedin.com/in/johndoe"
+            className="text-sm sm:text-base"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="website">Website/Portfolio</Label>
+          <Label htmlFor="website" className="text-sm sm:text-base">Website/Portfolio</Label>
           <Input
             id="website"
             value={data.personalInfo.website}
             onChange={(e) => handleInputChange("website", e.target.value)}
             placeholder="johndoe.com"
+            className="text-sm sm:text-base"
           />
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="professionalSummary">Professional Summary</Label>
+      <div className="space-y-3 sm:space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <Label htmlFor="professionalSummary" className="text-sm sm:text-base">Professional Summary</Label>
           <Button
             variant="outline"
             size="sm"
             onClick={generateSummary}
             disabled={isGenerating}
+            className="self-start sm:self-auto"
           >
-            <Sparkles className="mr-2 h-4 w-4" />
-            {isGenerating ? "Generating..." : "AI Generate"}
+            <Sparkles className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-xs sm:text-sm">{isGenerating ? "Generating..." : "AI Generate"}</span>
           </Button>
         </div>
         
@@ -135,20 +142,21 @@ const PersonalInfoForm = ({ data, updateData, onNext }: PersonalInfoFormProps) =
           onChange={(e) => handleInputChange("professionalSummary", e.target.value)}
           placeholder="A brief professional summary highlighting your key strengths and career objectives..."
           rows={4}
+          className="text-sm sm:text-base"
         />
         
         {isGenerating && (
-          <Card className="p-4 bg-blue-50 border-blue-200">
+          <Card className="p-3 sm:p-4 bg-blue-50 border-blue-200">
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-              <span className="text-sm text-blue-700">AI is crafting your professional summary...</span>
+              <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-blue-600"></div>
+              <span className="text-xs sm:text-sm text-blue-700">AI is crafting your professional summary...</span>
             </div>
           </Card>
         )}
       </div>
 
-      <div className="flex justify-end pt-4">
-        <Button onClick={onNext} disabled={!canProceed}>
+      <div className="flex justify-end pt-2 sm:pt-4">
+        <Button onClick={onNext} disabled={!canProceed} className="w-full sm:w-auto">
           Continue to Experience
         </Button>
       </div>
