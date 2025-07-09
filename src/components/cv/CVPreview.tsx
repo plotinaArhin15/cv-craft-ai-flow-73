@@ -4,15 +4,47 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Download, Mail, Phone, MapPin, Globe, Linkedin } from "lucide-react";
 import { CVData } from "@/pages/Builder";
+import { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface CVPreviewProps {
   data: CVData;
 }
 
 const CVPreview = ({ data }: CVPreviewProps) => {
-  const downloadPDF = () => {
-    // TODO: Implement PDF generation
-    alert("PDF download functionality will be implemented next!");
+  const cvRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const downloadPDF = async () => {
+    if (!cvRef.current) return;
+    
+    setIsGenerating(true);
+    try {
+      const canvas = await html2canvas(cvRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+      });
+      
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 0;
+      
+      pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.save(`${data.personalInfo.fullName || "CV"}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -25,13 +57,19 @@ const CVPreview = ({ data }: CVPreviewProps) => {
     <div className="space-y-3 sm:space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h3 className="text-base sm:text-lg font-semibold">CV Preview</h3>
-        <Button onClick={downloadPDF} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
+        <Button 
+          onClick={downloadPDF} 
+          disabled={isGenerating}
+          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+        >
           <Download className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="text-xs sm:text-sm">Download PDF</span>
+          <span className="text-xs sm:text-sm">
+            {isGenerating ? "Generating..." : "Download PDF"}
+          </span>
         </Button>
       </div>
 
-      <Card className="p-4 sm:p-6 lg:p-8 bg-white shadow-lg">
+      <Card className="p-4 sm:p-6 lg:p-8 bg-white shadow-lg" ref={cvRef}>
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 sm:pb-6 mb-4 sm:mb-6">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
