@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +15,11 @@ import {
   Settings
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import SampleCVModal from "@/components/SampleCVModal";
 
 const Index = () => {
+  const [showSampleCV, setShowSampleCV] = useState(false);
+
   const features = [
     {
       icon: Sparkles,
@@ -96,7 +99,12 @@ const Index = () => {
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
+              onClick={() => setShowSampleCV(true)}
+            >
               View Sample CV
             </Button>
           </div>
@@ -206,6 +214,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <SampleCVModal open={showSampleCV} onOpenChange={setShowSampleCV} />
     </div>
   );
 };
